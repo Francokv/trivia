@@ -10,9 +10,16 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.36",
+    "@prisma/nuxt": "^0.0.30",
     "ai": "^3.2.22",
+    "drizzle-orm": "^0.29.5",
     "nuxt": "^3.12.3",
     "vue": "latest",
     "vuetify-nuxt-module": "^0.15.1"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.17.0",
+    "prisma": "^5.17.0"
   }
 }
