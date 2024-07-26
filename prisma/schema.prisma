@@ -14,15 +14,18 @@ model Trivia {
   category  String
   description   String?
   questions Question[]
+  curiosities Json[]
 }
 
 model Question {
   id        String  @id @default(uuid())
   question  String
   emoji     String
-  explanation String?
+  explanation String
   trivia    Trivia  @relation(fields: [triviaId], references: [id])
   triviaId  String
+  correctMessage String
+  wrongMessage String
   answers   Answer[]
 }
 
@@ -30,7 +33,9 @@ model Answer {
   id        String  @id @default(uuid())
   answer    String
   isCorrect Boolean
+  emoji     String?
   questionId String
+  order     Int?
   question  Question @relation(fields: [questionId], references: [id])
 }
 

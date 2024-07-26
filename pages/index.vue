@@ -25,14 +25,22 @@
       </v-col>
     </v-row>
   </v-container>
+  <CreateTriviaLoadingModal ref="loadingTrivia" :loading="loadingQuestions" :trivia="newTrivia"/>
 </template>
 
 <script>
+import CreateTriviaLoadingModal from '~/components/CreateTriviaLoadingModal.vue'
+
 export default {
+  components: {
+    CreateTriviaLoadingModal,
+  },
   data: () => ({
     difficulty: 'Normal',
     topic: '',
     loadingSubmit: false,
+    loadingQuestions: false,
+    newTrivia: null,
     difficultyOptions: [
       { text: 'Facil', value: 'Facil' },
       { text: 'Normal', value: 'Normal' },
@@ -43,6 +51,10 @@ export default {
   methods: {
     async createTrivia() {
       this.loadingSubmit = true
+      this.loadingQuestions = true
+      this.newTrivia = null
+      this.$refs.loadingTrivia.openDialog()
+
       const data = {
         difficulty: this.difficulty,
         topic: this.topic,
@@ -55,8 +67,24 @@ export default {
         },
         body: JSON.stringify(data),
       })
-      console.log(response)
       this.loadingSubmit = false
+
+      console.log({response})
+      this.newTrivia = response.body
+      console.log(this.newTrivia)
+
+      const questionsResponse = await $fetch(`/api/questions/${this.newTrivia.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      this.loadingQuestions = false
+      if (!questionsResponse.ok) {
+        // TODO: Show error message
+      }
     },
   },
 }
