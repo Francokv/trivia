@@ -1,7 +1,7 @@
 <template>
   <v-card @click="$router.push(`/trivia/${trivia.id}`)" height="100%">
     <v-card-text class="d-flex justify-space-between flex-column h-100">
-      <div>
+      <div class="mb-2">
         <h3 class="mb-2"> 
           {{ trivia?.title }}
         </h3>

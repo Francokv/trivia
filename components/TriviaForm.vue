@@ -1,16 +1,33 @@
 <template>
-  <v-container class="h-screen">
-    <h1 class="text-center">Triv<span class="text-purple-accent-3">ia</span></h1>
-    <TriviaForm/>
-    <LatestTriviaSection/>
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="12" sm="6" md="4">
+        <v-text-field
+          v-model="topic"
+          append-inner-icon="mdi-arrow-right"
+          placeholder="javascript, idiomas"
+          :loading="loadingSubmit"
+          @keypress.enter="createTrivia()"
+          @click:append-inner="createTrivia()">
+
+        </v-text-field>
+        <div class="text-center">
+          <v-chip-group class="d-inline-block">
+            <v-chip v-for="option in difficultyOptions" :key="option.value" @click="difficulty = option.value"
+              :class="{ 'chip--active': difficulty === option.value }">
+              {{ option.text }}
+            </v-chip>
+          </v-chip-group>
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
+  <CreateTriviaLoadingModal ref="loadingTrivia" :loading="loadingQuestions" :trivia="newTrivia" />
 </template>
 
 <script>
 import CreateTriviaLoadingModal from '~/components/CreateTriviaLoadingModal.vue'
 import LatestTriviaSection from '~/components/LatestTriviaSection.vue';
-import TriviaForm from '~/components/TriviaForm.vue';
-
 export default {
   components: {
     CreateTriviaLoadingModal,
