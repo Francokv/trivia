@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="trivia">
+  <v-container v-if="trivia" height="100vh">
     <div>
       <span class="mr-2" color="primary" dark>{{ trivia.triviaName }}</span>
       <v-chip class="mr-2" color="primary" dark>
@@ -31,7 +31,31 @@
       </v-col>
     </v-row>
 
+    <div>
+    </div>
   </v-container>
+  <div v-if="trivia">
+    <v-container>
+      <!-- Check -->
+      <div class="d-flex justify-end">
+        <v-btn @click="checkAnswer()" color="primary" dark>Responder</v-btn>
+      </div>
+      <!-- Correct -->
+      <div>
+        <v-alert type="success" class="mt-4" border="left" elevation="2">
+          <v-icon>mdi-check</v-icon>
+          <span class="ml-2">adasd</span>
+        </v-alert>
+      </div>
+      <!-- Incorrect -->
+      <div>
+        <v-alert type="error" class="mt-4" border="left" elevation="2">
+          <v-icon>mdi-close</v-icon>
+          <span class="ml-2">asdad</span>
+        </v-alert>
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -47,6 +71,9 @@ export default {
     questions: []
   }),
   methods: {
+    checkAnswer() {
+      
+    },
     nextQuestion() {
       if (this.currentQuestion < this.questions.length - 1) {
         this.currentQuestion++

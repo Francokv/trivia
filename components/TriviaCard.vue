@@ -1,0 +1,35 @@
+<template>
+  <v-card @click="$router.push(`/trivia/${trivia.id}`)" height="100%">
+    <v-card-text class="d-flex justify-space-between flex-column h-100">
+      <div>
+        <h3 class="mb-2"> 
+          {{ trivia?.title }}
+        </h3>
+        <p>
+          {{ trivia?.description }}
+        </p>
+     </div>
+      <div>
+        <v-chip class="mr-2" color="primary" dark>
+          <v-icon class="mr-2">mdi-tag</v-icon>
+          {{ trivia.category }}
+        </v-chip>
+        <v-chip class="mr-2" color="primary" dark>
+          <v-icon class="mr-2">mdi-speedometer</v-icon>
+          {{ trivia.difficulty }}
+        </v-chip>
+      </div>
+    </v-card-text>
+  </v-card>
+</template>
+
+<script>
+export default {
+  props: {
+    trivia : {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script>

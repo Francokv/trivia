@@ -24,16 +24,18 @@
         </div>
       </v-col>
     </v-row>
+    <LatestTriviaSection/>
   </v-container>
   <CreateTriviaLoadingModal ref="loadingTrivia" :loading="loadingQuestions" :trivia="newTrivia"/>
 </template>
 
 <script>
 import CreateTriviaLoadingModal from '~/components/CreateTriviaLoadingModal.vue'
-
+import LatestTriviaSection from '~/components/LatestTriviaSection.vue';
 export default {
   components: {
     CreateTriviaLoadingModal,
+    LatestTriviaSection,
   },
   data: () => ({
     difficulty: 'Normal',
