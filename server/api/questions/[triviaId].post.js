@@ -39,7 +39,7 @@ Dame pregutnas ${quantity} preguntas para una trivia en json con el siguente for
     ],
     "wrongMessage": "message",
     "correctMessage": "message",
-    "htmlExplanation": "<b>explanation ...</b> and/or <br/><br/> example ..."
+    "htmlExplanation": "explanation <b> important data </b>  <br/><br/> example if needed"
   },
   + ${quantity-1} preguntas más
 ]
@@ -94,6 +94,16 @@ export default defineEventHandler(async (event) => {
     },
   })
 
+  if (trivia.isPublished) {
+    return {
+      statusCode: 400,
+      body: {
+        message: 'Trivia is already published',
+      },
+    }
+  }
+
+
   const { title: topic, difficulty, data, description } = trivia
 
   const questionsPromices = Promise.all([
@@ -101,6 +111,16 @@ export default defineEventHandler(async (event) => {
   ])
 
   await questionsPromices
+
+  trivia.isPublished = true
+  await prisma.trivia.update({
+    where: {
+      id: triviaId,
+    },
+    data: {
+      isPublished: true,
+    },
+  })
 
   return {
     statusCode: 200,

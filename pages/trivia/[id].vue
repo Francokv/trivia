@@ -8,7 +8,7 @@
             <v-icon class="mr-2">mdi-tag</v-icon>
             {{ trivia.category }}
           </v-chip>
-          <v-chip class="mr-2" color="primary" dark>
+          <v-chip class="mr-2" :color="getDifficultyColor(trivia.difficulty)" dark>
             <v-icon class="mr-2">mdi-speedometer</v-icon>
             {{ trivia.difficulty }}
           </v-chip>
@@ -28,7 +28,7 @@
   
       <v-tabs-window v-if="!finished" v-model="currentQuestion">
         <v-tabs-window-item v-for="question, index in questions" :value="index">
-          <div class="d-flex flex-column justify-space-between" style="height: 400px">
+          <div class="d-flex flex-column justify-space-between" style="min-height: 400px">
             <QuestionBlock :question="question" @next="nextQuestion()" @error="errors++"/>
           </div>
         </v-tabs-window-item>
@@ -46,6 +46,7 @@
 <script>
 import QuestionBlock from '../../components/QuestionBlock.vue'
 import FinishTriviaBlock from '../../components/FinishTriviaBlock.vue'
+import { getDifficultyColor } from '@/utils'
 
 export default {
   components: {
@@ -59,6 +60,7 @@ export default {
     errors: 0,
   }),
   methods: {
+    getDifficultyColor,
     checkAnswer() {
       
     },

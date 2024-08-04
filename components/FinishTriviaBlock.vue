@@ -42,9 +42,9 @@ export default {
       if (this.errors === 0) {
         return '¡Felicidades! Has completado la trivia sin errores.'
       } else if (this.errors === 1) {
-        return '¡Casi perfecto! Solo has cometido un error en la trivia.'
+        return '¡Casi perfecto! Solo has cometido un error.'
       } else {
-        return `Has cometido ${this.errors} errores en la trivia.`
+        return `Has cometido ${this.errors} errores.`
       }
     },
   },

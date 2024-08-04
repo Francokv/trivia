@@ -1,13 +1,15 @@
 <template>
   <v-card variant="tonal" :color="color">
-    <v-card-text class="d-flex justify-space-between ga-4 align-center">
+    <v-card-text class="d-md-flex justify-space-between ga-4 align-center ">
       <div>
-        <div >
+        <div v-if="submitted">
           <h4 class="mb-2" style="font-size: 20px;">{{ message }}</h4>
           <p style="font-size: 16px;" v-html="explanation"></p>
         </div>
       </div>
-      <v-btn color="primary" dark @click="$emit('submit')" :disabled="disabled" size="x-large" style="">Continuar</v-btn>
+      <div class="text-right mt-4 mt-md-0">
+        <v-btn color="primary" dark @click="$emit('submit')" :disabled="disabled" size="x-large" style="">Continuar</v-btn>
+      </div>
     </v-card-text>
   </v-card>
 </template>

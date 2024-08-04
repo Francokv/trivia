@@ -1,6 +1,9 @@
 <template>
   <v-container class="h-screen">
-    <h1 class="text-center">Triv<span class="text-purple-accent-3">ia</span></h1>
+    <h1 class="text-center mt-md-16" style="font-size: 60px;">TRIV<span class="text-primary">IA</span></h1>
+    <div class="text-center mb-4">
+      <span style="max-width: 500px; display: inline-block;">Bienvenido al futuro de la trivia. Nuestra IA genera preguntas que expanden tu conocimiento y desafían tus habilidades, haciendo el aprendizaje más divertido.</span>
+    </div>
     <TriviaForm/>
     <LatestTriviaSection/>
   </v-container>
@@ -16,58 +19,5 @@ export default {
     CreateTriviaLoadingModal,
     LatestTriviaSection,
   },
-  data: () => ({
-    difficulty: 'Normal',
-    topic: '',
-    loadingSubmit: false,
-    loadingQuestions: false,
-    newTrivia: null,
-    difficultyOptions: [
-      { text: 'Facil', value: 'Facil' },
-      { text: 'Normal', value: 'Normal' },
-      { text: 'Dificil', value: 'Dificil' },
-      { text: 'Imposible', value: 'Imposible' },
-    ],
-  }),
-  methods: {
-    async createTrivia() {
-      this.loadingSubmit = true
-      this.loadingQuestions = true
-      this.newTrivia = null
-      this.$refs.loadingTrivia.openDialog()
-
-      const data = {
-        difficulty: this.difficulty,
-        topic: this.topic,
-      }
-      // Trivia API
-      const response = await $fetch('/api/trivia', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-      this.loadingSubmit = false
-
-      console.log({response})
-      this.newTrivia = response.body
-      console.log(this.newTrivia)
-
-      const questionsResponse = await $fetch(`/api/questions/${this.newTrivia.id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-
-      this.loadingQuestions = false
-      if (!questionsResponse.ok) {
-        // TODO: Show error message
-      }
-    },
-  },
 }
-
 </script>

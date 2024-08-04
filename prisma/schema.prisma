@@ -16,6 +16,7 @@ model Trivia {
   questions Question[]
   curiosities Json[]
   isPublished Boolean @default(false)
+  createdAt DateTime @default(now())
 }
 
 model Question {
