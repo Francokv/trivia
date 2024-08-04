@@ -16,19 +16,23 @@
         </v-tabs-window-item>
 
       </v-tabs-window>
-      <small>Genrando preguntas</small>
-    <div>{{ loading }}</div>
+      <div v-if="progress < 100">
+        <small>Genrando preguntas</small>
 
-      <v-progress-linear :location="false" buffer-opacity="1" color="success" height="12" max="100" min="0"
-        :model-value="progress" rounded></v-progress-linear>
-      <v-btn v-if="progress >= 100" color="primary" @click="goToTrivia()">Comenzar</v-btn>
+        <v-progress-linear :location="false" buffer-opacity="1" color="success" height="12" max="100" min="0"
+          :model-value="progress" rounded></v-progress-linear>
+      </div>
+      <div class="text-center">
+        <v-btn v-if="progress >= 100" color="primary" @click="goToTrivia()" size="x-large">Comenzar</v-btn>
+      </div>
     </v-card-text>
-    <v-skeleton-loader
-    v-else
-    class="mx-auto"
-    max-width="100%"
-    type="table-heading, list-item-two-line, image, table-tfoot"
-  ></v-skeleton-loader>
+    <v-card-text v-else>
+      <v-skeleton-loader
+      class="mx-auto"
+      width="100%"
+      type="table-heading, list-item-two-line, image, table-tfoot"
+    ></v-skeleton-loader>
+    </v-card-text>
   </v-card>
 </v-dialog>
 </template>

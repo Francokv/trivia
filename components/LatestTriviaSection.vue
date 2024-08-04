@@ -14,28 +14,7 @@ export default {
     TriviaList
   },
   data: () => ({
-    trivias: [
-      {
-        id: 1,
-        name: 'Trivia 1',
-        description: 'Description 1'
-      },
-      {
-        id: 2,
-        name: 'Trivia 2',
-        description: 'Description 2'
-      },
-      {
-        id: 3,
-        name: 'Trivia 3',
-        description: 'Description 3'
-      },
-      {
-        id: 4,
-        name: 'Trivia 4',
-        description: 'Description 4'
-      },
-    ]
+    trivias: []
   }),
   methods: {
     async fetchTrivias() {

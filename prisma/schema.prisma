@@ -15,6 +15,7 @@ model Trivia {
   description   String?
   questions Question[]
   curiosities Json[]
+  isPublished Boolean @default(false)
 }
 
 model Question {

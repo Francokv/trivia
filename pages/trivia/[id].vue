@@ -1,65 +1,51 @@
 <template>
   <v-container v-if="trivia" height="100vh">
-    <div>
-      <span class="mr-2" color="primary" dark>{{ trivia.triviaName }}</span>
-      <v-chip class="mr-2" color="primary" dark>
-        <v-icon class="mr-2">mdi-tag</v-icon>
-        {{ trivia.category }}
-      </v-chip>
-      <v-chip class="mr-2" color="primary" dark>
-        <v-icon class="mr-2">mdi-speedometer</v-icon>
-        {{ trivia.difficulty }}
-      </v-chip>
-    </div>
-    <div class="d-flex align-center mb-md-8 mb-4">
-      <v-btn class="mr-2" color="primary" variant="text" icon to="/">
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
-      <v-progress-linear :location="false" buffer-opacity="1" color="success" height="12" :max="questions.length" min="0"
-        :model-value="currentQuestion" rounded></v-progress-linear>
-    </div>
     <v-row class="justify-center">
       <v-col md="6" sm="10">
-        <v-tabs-window v-model="currentQuestion">
-          <v-tabs-window-item v-for="question, index in questions" :value="index">
-            <div class="d-flex flex-column justify-space-between" style="height: 400px">
-              <QuestionBlock :question="question"/>
-            </div>
-          </v-tabs-window-item>
-        </v-tabs-window>
-
+        <div>
+          <span class="mr-2" color="primary" dark>{{ trivia.triviaName }}</span>
+          <v-chip class="mr-2" color="primary" dark>
+            <v-icon class="mr-2">mdi-tag</v-icon>
+            {{ trivia.category }}
+          </v-chip>
+          <v-chip class="mr-2" color="primary" dark>
+            <v-icon class="mr-2">mdi-speedometer</v-icon>
+            {{ trivia.difficulty }}
+          </v-chip>
+        </div>
+        <div class="d-flex align-center mb-md-8 mb-4">
+          <v-btn class="mr-2" color="primary" variant="text" icon to="/">
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
+          <v-progress-linear :location="false" buffer-opacity="1" color="success" height="12" :max="questions.length - 1" min="0"
+            :model-value="currentQuestion" rounded></v-progress-linear>
+          <b>
+            <span class="ml-2 text-primary">{{ currentQuestion + 1 }}/{{ questions.length }}</span>
+          </b>
+        </div>
       </v-col>
     </v-row>
+  
+      <v-tabs-window v-if="!finished" v-model="currentQuestion">
+        <v-tabs-window-item v-for="question, index in questions" :value="index">
+          <div class="d-flex flex-column justify-space-between" style="height: 400px">
+            <QuestionBlock :question="question" @next="nextQuestion()" @error="errors++"/>
+          </div>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="end">
+        </v-tabs-window-item>
+
+      </v-tabs-window>
+      <FinishTriviaBlock v-else :errors="errors" :totalQuestions="questions.length"/>
 
     <div>
     </div>
   </v-container>
-  <div v-if="trivia">
-    <v-container>
-      <!-- Check -->
-      <div class="d-flex justify-end">
-        <v-btn @click="checkAnswer()" color="primary" dark>Responder</v-btn>
-      </div>
-      <!-- Correct -->
-      <div>
-        <v-alert type="success" class="mt-4" border="left" elevation="2">
-          <v-icon>mdi-check</v-icon>
-          <span class="ml-2">adasd</span>
-        </v-alert>
-      </div>
-      <!-- Incorrect -->
-      <div>
-        <v-alert type="error" class="mt-4" border="left" elevation="2">
-          <v-icon>mdi-close</v-icon>
-          <span class="ml-2">asdad</span>
-        </v-alert>
-      </div>
-    </v-container>
-  </div>
 </template>
 
 <script>
 import QuestionBlock from '../../components/QuestionBlock.vue'
+import FinishTriviaBlock from '../../components/FinishTriviaBlock.vue'
 
 export default {
   components: {
@@ -68,7 +54,9 @@ export default {
   data: () => ({
     trivia: null,
     currentQuestion: 0,
-    questions: []
+    finished: false,
+    questions: [],
+    errors: 0,
   }),
   methods: {
     checkAnswer() {
@@ -77,6 +65,8 @@ export default {
     nextQuestion() {
       if (this.currentQuestion < this.questions.length - 1) {
         this.currentQuestion++
+      } else {
+        this.finished = true
       }
     },
     async fetchQuestions() {
