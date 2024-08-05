@@ -16,7 +16,8 @@
     "drizzle-orm": "^0.29.5",
     "nuxt": "^3.12.3",
     "vue": "latest",
-    "vuetify-nuxt-module": "^0.15.1"
+    "vuetify-nuxt-module": "^0.15.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@prisma/client": "^5.17.0",
