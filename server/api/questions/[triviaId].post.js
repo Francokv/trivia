@@ -7,9 +7,9 @@ const openai = createOpenAI({
 
 import { generateText } from 'ai'
 
-const getPrompt = ({ topic, difficulty, description, quantity=10 }) => {
+const getPrompt = ({ topic, difficulty, description, quantity=10, title }) => {
   return `
-El tema es "${topic}" y la dificultad = "${difficulty}". Usa emojis relacionados al tema. El emoji no debe revelar la cual es la respuesta correcta, debe ser solo decorativo. Solo una respuesta correcta. Responde solo en formato json
+El tema es "${topic}", el titulo es "${title}" y la dificultad es "${difficulty}" (la escala de dificultad es: Facil, Normal, Difícil, Imposible). Usa emojis relacionados al tema. El emoji no debe revelar la cual es la respuesta correcta, debe ser solo decorativo. Solo una respuesta correcta. Responde solo en formato json
 Dame pregutnas ${quantity} preguntas para una trivia en json con el siguente formato:
 [
   {
@@ -47,8 +47,8 @@ Dame pregutnas ${quantity} preguntas para una trivia en json con el siguente for
 `
 }
 
-const createQuestions = async ({ triviaId, topic, difficulty, description, quantity=10 }) => {
-  const prompt = getPrompt({ topic, difficulty, description, quantity })
+const createQuestions = async ({ triviaId, topic, difficulty, description, quantity=10, title }) => {
+  const prompt = getPrompt({ topic, difficulty, description, quantity, title })
   console.log('prompt', prompt)
   const { text } = await generateText({
     model: openai('gpt-4o'),
@@ -104,10 +104,10 @@ export default defineEventHandler(async (event) => {
   }
 
 
-  const { title: topic, difficulty, data, description } = trivia
+  const { title, difficulty, data, description, rawTopic: topic } = trivia
 
   const questionsPromices = Promise.all([
-    await createQuestions({ triviaId, topic, difficulty, description, quantity:10 }),
+    await createQuestions({ triviaId, topic, difficulty, description, quantity:10, title }),
   ])
 
   await questionsPromices

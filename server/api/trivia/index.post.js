@@ -7,6 +7,7 @@ const openai = createOpenAI({
 });
 
 import { generateText } from 'ai';
+import { raw } from '@prisma/client/runtime/library';
 
 
 const getCreateTrivaPrompt = ({topic, difficulty}) => {
@@ -39,6 +40,7 @@ export default defineEventHandler(async (event) => {
   const triviaInstance = await prisma.trivia.create({
     data: {
       ...data,
+      rawTopic: topic,
       difficulty,
     },
   })

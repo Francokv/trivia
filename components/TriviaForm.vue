@@ -46,7 +46,7 @@ export default {
     difficultyOptions: [
       { text: 'Facil', value: 'Facil', color: getDifficultyColor('Facil') },
       { text: 'Normal', value: 'Normal', color: getDifficultyColor('Normal') },
-      { text: 'Dificil', value: 'Dificil', color: getDifficultyColor('Dificil') },
+      { text: 'Difícil', value: 'Difícil', color: getDifficultyColor('Difícil') },
       { text: 'Imposible', value: 'Imposible', color: getDifficultyColor('Imposible') },
     ],
     cancel: false,

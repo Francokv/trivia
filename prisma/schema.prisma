@@ -17,6 +17,7 @@ model Trivia {
   curiosities Json[]
   isPublished Boolean @default(false)
   createdAt DateTime @default(now())
+  rawTopic String @default("")
 }
 
 model Question {
@@ -40,4 +41,3 @@ model Answer {
   order     Int?
   question  Question @relation(fields: [questionId], references: [id])
 }
-
