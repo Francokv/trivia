@@ -2,6 +2,7 @@ export const difficultyColors = {
   Facil: 'green',
   Normal: 'primary',
   'Difícil': 'warning',
+  Dificil: 'warning',
   Imposible: 'error',
 }
 
