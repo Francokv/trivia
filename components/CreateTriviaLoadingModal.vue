@@ -1,25 +1,21 @@
 <template>
 <v-dialog v-model="dialog" max-width="600" persistent>
-  <v-card>
+  <v-card style="position: relative;">
     <v-card-text v-if="trivia">
-      <h1 class="text-center text-h4">
+      <h1 class="text-center text-h4 text-primary mb-4 px-8">
         {{ trivia.title }}
       </h1>
-      <div class="text-center">
-        <small>{{ trivia.description }}</small>
-      </div>
-
-      <h4>Curiosidades</h4>
-      <v-tabs-window v-model="curiosityTab">
+      <h4 class="text-primary mb-1">Curiosidades</h4>
+      <v-tabs-window v-model="curiosityTab" :key="trivia.id">
         <v-tabs-window-item v-for="(curiosity, index) in trivia.curiosities" :key="index" :value="index" style="min-height: 100px;">
           {{ curiosity }}
         </v-tabs-window-item>
 
       </v-tabs-window>
-      <div v-if="progress < 100">
+      <div v-if="progress < 100" class="mr-4">
         <small>Genrando preguntas</small>
 
-        <v-progress-linear :location="false" buffer-opacity="1" color="success" height="12" max="100" min="0"
+        <v-progress-linear location="false" buffer-opacity="1" color="success" height="12" max="100" min="0"
           :model-value="progress" rounded></v-progress-linear>
       </div>
       <div class="text-center">
@@ -33,11 +29,15 @@
       type="table-heading, list-item-two-line, image, table-tfoot"
     ></v-skeleton-loader>
     </v-card-text>
+    <v-btn icon @click="handleCancel()" class="d-fixed" size="small" variant="flat" style="right: 20px; top: 20px; position: fixed;">
+      <v-icon>mdi-close</v-icon>
+    </v-btn>
   </v-card>
 </v-dialog>
 </template>
 
 <script>
+
 export default {
   props: {
     loading: {
@@ -59,6 +59,7 @@ export default {
     trivia() {
       if (this.trivia) {
         this.startProgress()
+        this.nextCuriosity()
       }
     },
   },
@@ -75,7 +76,6 @@ export default {
     },
     closeDialog() {
       this.dialog = false
-      clearInterval(this.interval)
     },
     loaded() {
       this.loading = false
@@ -83,12 +83,15 @@ export default {
     goToTrivia() {
       this.$router.push(`/trivia/${this.trivia.id}`)
     },
+    handleCancel() {
+      this.$emit('cancel')
+    },
     startProgress() {
       this.progress = 0
       this.interval = setInterval(() => {
-          
+
           if (this.progress >= 50) {
-            this.progressAccelerationPerSecond = 0.5
+            this.progressAccelerationPerSecond = 0.2
           }
 
           if (this.progress >= 70) {

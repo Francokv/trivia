@@ -56,7 +56,7 @@ const createQuestions = async ({ triviaId, topic, difficulty, description, quant
   })
 
 
-  const cleanJson = text.replaceAll('```', '').replaceAll('json', '')
+  const cleanJson = text.replaceAll('```json', '').replaceAll('```', '')
   const questions = JSON.parse(cleanJson)
 
   const questionsResult = []

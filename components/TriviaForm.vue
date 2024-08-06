@@ -23,13 +23,15 @@
       </v-col>
     </v-row>
   </v-container>
-  <CreateTriviaLoadingModal ref="loadingTrivia" :loading="loadingQuestions" :trivia="newTrivia" />
+  <CreateTriviaLoadingModal ref="loadingTrivia" :loading="loadingQuestions" :trivia="newTrivia" @cancel="handleCancel()"/>
 </template>
 
 <script>
 import CreateTriviaLoadingModal from '~/components/CreateTriviaLoadingModal.vue'
 import LatestTriviaSection from '~/components/LatestTriviaSection.vue';
 import { getDifficultyColor, getRandomTopicSuggestions } from '@/utils'
+import { useToast } from 'vue-toastification'
+
 export default {
   components: {
     CreateTriviaLoadingModal,
@@ -48,14 +50,15 @@ export default {
       { text: 'Dificil', value: 'Dificil', color: getDifficultyColor('Dificil') },
       { text: 'Imposible', value: 'Imposible', color: getDifficultyColor('Imposible') },
     ],
+    cancel: false,
   }),
   methods: {
     async createTrivia() {
+      this.cancel = false
       this.loadingSubmit = true
       this.loadingQuestions = true
       this.newTrivia = null
       this.$refs.loadingTrivia.openDialog()
-
       const data = {
         difficulty: this.difficulty,
         topic: this.topic,
@@ -68,11 +71,18 @@ export default {
         },
         body: JSON.stringify(data),
       })
+      if (this.cancel) {
+        return
+      }
       this.loadingSubmit = false
 
       console.log({response})
       this.newTrivia = response.body
-      console.log(this.newTrivia)
+      if (!response.statusCode === 200) {
+        this.$refs.loadingTrivia.closeDialog()
+        useToast().error('Error al crear trivia, por favor intenta de nuevo')
+        return
+      }
 
       const questionsResponse = await $fetch(`/api/questions/${this.newTrivia.id}`, {
         method: 'POST',
@@ -81,12 +91,25 @@ export default {
         },
         body: JSON.stringify(data),
       })
+      if (this.cancel) {
+        return
+      }
 
       this.loadingQuestions = false
-      if (!questionsResponse.ok) {
-        // TODO: Show error message
+      if (!questionsResponse.statusCode === 200) {
+        this.$refs.loadingTrivia.closeDialog()
+        useToast().error('Error al generar preguntas, por favor intenta de nuevo')
+        return
       }
     },
+    handleCancel() {
+      useToast().warning('Creación de trivia cancelada')
+      this.cancel = true
+      this.loadingSubmit = false
+      this.loadingQuestions = false
+      this.newTrivia = null
+      this.$refs.loadingTrivia.closeDialog()
+    }
   },
 }
 

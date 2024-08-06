@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     prompt: createTriviaPrompt,
   });
 
-  trivia = trivia.replaceAll('```', '').replaceAll('json', '')
+  trivia = trivia..replaceAll('```json', '').replaceAll('```', '')
   console.log('trivia', trivia)
 
   const data = JSON.parse(trivia)

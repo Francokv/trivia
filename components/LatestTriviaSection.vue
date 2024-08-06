@@ -18,7 +18,7 @@ export default {
   }),
   methods: {
     async fetchTrivias() {
-      const trivias = await $fetch('/api/trivia?take=12', {
+      const trivias = await $fetch('/api/trivia?take=40', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
