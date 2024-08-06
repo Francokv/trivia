@@ -29,7 +29,7 @@
 import CreateTriviaLoadingModal from '~/components/CreateTriviaLoadingModal.vue'
 import LatestTriviaSection from '~/components/LatestTriviaSection.vue';
 import { getDifficultyColor, getRandomTopicSuggestions } from '@/utils'
-import { useToast } from 'vue-toastification'
+import _, { useToast } from 'vue-toastification'
 
 export default {
   components: {
