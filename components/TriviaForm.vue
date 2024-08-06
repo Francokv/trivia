@@ -7,7 +7,6 @@
           append-inner-icon="mdi-arrow-right"
           :placeholder="placeholder"
           variant="solo-filled"
-          :loading="loadingSubmit"
           @keypress.enter="createTrivia()"
           @click:append-inner="createTrivia()">
 
@@ -51,14 +50,18 @@ export default {
       { text: 'Imposible', value: 'Imposible', color: getDifficultyColor('Imposible') },
     ],
     cancel: false,
+    submitCountCanceled: [],
+    submitCount: 0,
   }),
   methods: {
     async createTrivia() {
-      this.cancel = false
       this.loadingSubmit = true
       this.loadingQuestions = true
       this.newTrivia = null
       this.$refs.loadingTrivia.openDialog()
+      this.submitCount++
+      const _submitCount = this.submitCount
+
       const data = {
         difficulty: this.difficulty,
         topic: this.topic,
@@ -71,7 +74,10 @@ export default {
         },
         body: JSON.stringify(data),
       })
-      if (this.cancel) {
+      console.log({submitCountCanceled: this.submitCountCanceled})
+      console.log({_submitCount, submitCount: this.submitCount})
+
+      if (this.submitCountCanceled.includes(_submitCount)) {
         return
       }
       this.loadingSubmit = false
@@ -79,8 +85,7 @@ export default {
       console.log({response})
       this.newTrivia = response.body
       if (!response.statusCode === 200) {
-        this.$refs.loadingTrivia.closeDialog()
-        useToast().error('Error al crear trivia, por favor intenta de nuevo')
+        this.handleError()
         return
       }
 
@@ -91,24 +96,25 @@ export default {
         },
         body: JSON.stringify(data),
       })
-      if (this.cancel) {
+      console.log({submitCountCanceled: this.submitCountCanceled})
+      console.log({_submitCount, submitCount: this.submitCount})
+      if (this.submitCountCanceled.includes(_submitCount)) {
         return
       }
 
       this.loadingQuestions = false
       if (!questionsResponse.statusCode === 200) {
-        this.$refs.loadingTrivia.closeDialog()
-        useToast().error('Error al generar preguntas, por favor intenta de nuevo')
+        this.handleError()
         return
       }
     },
     handleCancel() {
       useToast().warning('Creación de trivia cancelada')
-      this.cancel = true
-      this.loadingSubmit = false
-      this.loadingQuestions = false
-      this.newTrivia = null
+      this.submitCountCanceled.push(this.submitCount)
       this.$refs.loadingTrivia.closeDialog()
+    },
+    handleError() {
+      useToast().error('Error al crear trivia, por favor intenta de nuevo')
     }
   },
 }

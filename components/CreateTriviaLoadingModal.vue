@@ -54,24 +54,31 @@ export default {
     progress: 0,
     progressAccelerationPerSecond: 1,
     curiosityTab: 0,
+    startNextCuriosityInterval: null,
   }),
   watch: {
     trivia() {
       if (this.trivia) {
+        if (this.interval){
+          clearInterval(this.interval)
+        }
+        if (this.startNextCuriosityInterval){
+          clearInterval(this.startNextCuriosityInterval)
+        }
         this.startProgress()
-        this.nextCuriosity()
+        this.startNextCuriosity()
       }
     },
   },
   methods: {
-    nextCuriosity() {
-      if (this.curiosityTab === this.trivia?.curiosities.length - 1) {
-        this.curiosityTab = 0
-      } else {
-        this.curiosityTab = this.curiosityTab + 1
-      }
-      setTimeout(() => {
-        this.nextCuriosity()
+    startNextCuriosity() {
+      this.startNextCuriosityInterval = setInterval(() => {
+        console.log(this.curiosityTab)
+        if (this.curiosityTab >= this.trivia?.curiosities.length - 1) {
+          this.curiosityTab = 0
+        } else {
+          this.curiosityTab = this.curiosityTab + 1
+        }
       }, 8000)
     },
     closeDialog() {
@@ -84,6 +91,8 @@ export default {
       this.$router.push(`/trivia/${this.trivia.id}`)
     },
     handleCancel() {
+      clearInterval(this.interval)
+      clearInterval(this.startNextCuriosityInterval)
       this.$emit('cancel')
     },
     startProgress() {
@@ -122,7 +131,7 @@ export default {
     openDialog() {
       this.progress = 0
       this.dialog = true
-      this.nextCuriosity()
+      this.startNextCuriosity()
     },
   },
 }
